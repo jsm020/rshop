@@ -80,18 +80,23 @@ WSGI_APPLICATION = 'Rshop.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#        'default': {
+#            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#            'NAME': 'telegrambot',
+#            'USER': 'postgres',
+#            'PASSWORD': 'new_password',
+#            'HOST': 'localhost',
+#            'PORT': '',  # PostgreSQL uchun standart port 5432 bo'ladi, bo'sh qoldirilsa ham to'g'ri ishlaydi
+#        }
+#    }
+
 DATABASES = {
-       'default': {
-           'ENGINE': 'django.db.backends.postgresql_psycopg2',
-           'NAME': 'telegrambot',
-           'USER': 'postgres',
-           'PASSWORD': 'new_password',
-           'HOST': 'localhost',
-           'PORT': '',  # PostgreSQL uchun standart port 5432 bo'ladi, bo'sh qoldirilsa ham to'g'ri ishlaydi
-       }
-   }
-
-
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
