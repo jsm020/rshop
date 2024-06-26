@@ -1,0 +1,55 @@
+{% extends './base.html' %}
+{% block content %}
+
+
+        <!-- Breadcrumb Start -->
+        <div class="breadcrumb-wrap">
+            <div class="container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Products</a></li>
+                    <li class="breadcrumb-item active">Login & Register</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Breadcrumb End -->
+        
+        <!-- Login Start -->
+    <div class="login">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="login-form">
+                        <h2>Kirish</h2>
+                        <form method="post" action="{% url 'login' %}" class="register_form">
+                            {% csrf_token %}
+
+                            <div class="register_div">
+                                <label for="{{ form.username.id_for_label }}">Telefon raqam:</label>
+                                {{ form.username }}
+                                {% if form.username.errors %}
+                                    <div class="error">{{ form.username.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="register_div">
+                                <label for="{{ form.password.id_for_label }}">Password:</label>
+                                {{ form.password }}
+                                {% if form.password.errors %}
+                                    <div class="error">{{ form.password.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="register_div">
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                                <a href="{% url 'register' %}">
+                                    <button class="btn btn-primary" type="button">Ro'yxatdan o'tish</button>
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- Login End -->
+        
+        {% endblock content %}

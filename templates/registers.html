@@ -1,0 +1,92 @@
+{% extends './base.html' %}
+{% block content %}
+
+        <!-- Breadcrumb Start -->
+        <div class="breadcrumb-wrap">
+            <div class="container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Products</a></li>
+                    <li class="breadcrumb-item active">Login & Register</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Breadcrumb End -->
+        
+        <!-- Login Start -->
+        <div class="login">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="register-form">
+                            <h2>Ro'yxatdan o'tish</h2>
+                            <form method="post" action="{% url 'register' %}" class="register_form">
+                                {% csrf_token %}
+                                <div>
+                                    {% if messages %}
+                                        {% for message in messages %}
+                                            <p>{{ message }}</p>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="register_div">
+                                    <label for="{{ form.username.id_for_label }}">Username:</label>
+                                    {{ form.username }}
+                                    {% if form.username.errors %}
+                                        <div class="error">{{ form.username.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="register_div">
+                                    <label for="{{ form.first_name.id_for_label }}">Ism:</label>
+                                    {{ form.first_name }}
+                                    {% if form.first_name.errors %}
+                                        <div class="error">{{ form.first_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="register_div">
+                                    <label for="{{ form.last_name.id_for_label }}">Familiya:</label>
+                                    {{ form.last_name }}
+                                    {% if form.last_name.errors %}
+                                        <div class="error">{{ form.last_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="register_div">
+                                    <label for="{{ form.email.id_for_label }}">Email:</label>
+                                    {{ form.email }}
+                                    {% if form.email.errors %}
+                                        <div class="error">{{ form.email.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="register_div">
+                                    <label for="{{ form.phone_number.id_for_label }}">Nomer:</label>
+                                    {{ form.phone_number }}
+                                    {% if form.phone_number.errors %}
+                                        <div class="error">{{ form.phone_number.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="register_div">
+                                    <label for="{{ form.password1.id_for_label }}">Parol:</label>
+                                    {{ form.password1 }}
+                                    {% if form.password1.errors %}
+                                        <div class="error">{{ form.password1.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="register_div">
+                                    <label for="{{ form.password2.id_for_label }}">Parolni takrorlang:</label>
+                                    {{ form.password2 }}
+                                    {% if form.password2.errors %}
+                                        <div class="error">{{ form.password2.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <button class="btn btn-primary" type="submit">Tasdiqlash</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <!-- Login End -->
+        
+        {% endblock content %}
+
