@@ -1,12 +1,14 @@
 {% extends './base.html' %}
 {% block content %}
+{% load custom_filters %}
+
         <!-- Breadcrumb Start -->
         <div class="breadcrumb-wrap">
             <div class="container-fluid">
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Products</a></li>
-                    <li class="breadcrumb-item active">Product Detail</li>
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Umumiy</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'product_list' %}">Mahsulotlar</a></li>
+                    <li class="breadcrumb-item active">Mahsulot</li>
                 </ul>
             </div>
         </div>
@@ -55,7 +57,7 @@
                                                 <button class="btn-plus"><i class="fa fa-plus"></i></button>
                                             </div>
                                         </div>
-                                        <div class="p-size">
+                                        <!-- <div class="p-size">
                                             <h4>Size:</h4>
                                             <div class="btn-group btn-group-sm">
                                                 <button type="button" class="btn">S</button>
@@ -63,15 +65,15 @@
                                                 <button type="button" class="btn">L</button>
                                                 <button type="button" class="btn">XL</button>
                                             </div> 
-                                        </div>
-                                        <div class="p-color">
+                                        </div> -->
+                                        <!-- <div class="p-color">
                                             <h4>Color:</h4>
                                             <div class="btn-group btn-group-sm">
                                                 <button type="button" class="btn">White</button>
                                                 <button type="button" class="btn">Black</button>
                                                 <button type="button" class="btn">Blue</button>
                                             </div> 
-                                        </div>
+                                        </div> -->
                                         <div class="action">
                                             <a class="btn" href="#"><i class="fa fa-shopping-cart"></i>Add to Cart</a>
                                             <a class="btn" href="#"><i class="fa fa-shopping-bag"></i>Buy Now</a>
@@ -85,24 +87,22 @@
                             <div class="col-lg-12">
                                 <ul class="nav nav-pills nav-justified">
                                     <li class="nav-item">
-                                        <a class="nav-link active" data-toggle="pill" href="#description">Description</a>
+                                        <a class="nav-link active" data-toggle="pill" href="#description">Mahsulot haqida</a>
                                     </li>
-                                    <li class="nav-item">
+                                    <!-- <li class="nav-item">
                                         <a class="nav-link" data-toggle="pill" href="#specification">Specification</a>
-                                    </li>
+                                    </li> -->
                                     <li class="nav-item">
-                                        <a class="nav-link" data-toggle="pill" href="#reviews">Reviews (1)</a>
+                                        <a class="nav-link" data-toggle="pill" href="#reviews">Izohlar ({{reviews_count}})</a>
                                     </li>
                                 </ul>
 
                                 <div class="tab-content">
                                     <div id="description" class="container tab-pane active">
-                                        <h4>Product description</h4>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. In condimentum quam ac mi viverra dictum. In efficitur ipsum diam, at dignissim lorem tempor in. Vivamus tempor hendrerit finibus. Nulla tristique viverra nisl, sit amet bibendum ante suscipit non. Praesent in faucibus tellus, sed gravida lacus. Vivamus eu diam eros. Aliquam et sapien eget arcu rhoncus scelerisque. Suspendisse sit amet neque neque. Praesent suscipit et magna eu iaculis. Donec arcu libero, commodo ac est a, malesuada finibus dolor. Aenean in ex eu velit semper fermentum. In leo dui, aliquet sit amet eleifend sit amet, varius in turpis. Maecenas fermentum ut ligula at consectetur. Nullam et tortor leo. 
-                                        </p>
+                                        <h4>{{product.nomi}}</h4>
+                                        <p>{{product.tavsif}}</p>
                                     </div>
-                                    <div id="specification" class="container tab-pane fade">
+                                    <!-- <div id="specification" class="container tab-pane fade">
                                         <h4>Product specification</h4>
                                         <ul>
                                             <li>Lorem ipsum dolor sit amet</li>
@@ -111,53 +111,104 @@
                                             <li>Lorem ipsum dolor sit amet</li>
                                             <li>Lorem ipsum dolor sit amet</li>
                                         </ul>
-                                    </div>
+                                    </div> -->
                                     <div id="reviews" class="container tab-pane fade">
-                                        <div class="reviews-submitted">
-                                            <div class="reviewer">Phasellus Gravida - <span>01 Jan 2020</span></div>
-                                            <div class="ratting">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
+                                        {% for review in reviews %}
+                                            <div class="reviews-submitted">
+                                                <div class="reviewer">{{ review.user }} - <span>{{ review.time|date:"d M Y" }}</span></div>
+                                                <div class="ratting">
+                                                    {% for i in 1|to:5 %}
+                                                        <i class="fa fa-star{% if i > review.reyting %}-o{% endif %}"></i>
+                                                    {% endfor %}
+                                                </div>
+                                                <p>{{ review.izoh }}</p>
                                             </div>
-                                            <p>
-                                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.
-                                            </p>
-                                        </div>
-                                        <div class="reviews-submit">
-                                            <h4>Give your Review:</h4>
-                                            <div class="ratting">
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                            <div class="row form">
-                                                <div class="col-sm-6">
-                                                    <input type="text" placeholder="Name">
+                                        {% endfor %}
+                                    
+                                        {% if user.is_authenticated %}
+                                            <h3>Izoh qoldiring</h3>
+                                            <form method="post" class="review-form">
+                                                {% csrf_token %}
+                                                <div class="ratting">
+                                                    <!-- Display 4 stars initially -->
+                                                    <i class="far fa-star reytinguser" id="star1"></i>
+                                                    <i class="far fa-star reytinguser" id="star2"></i>
+                                                    <i class="far fa-star reytinguser" id="star3"></i>
+                                                    <i class="far fa-star reytinguser" id="star4"></i>
+                                                    <i class="far fa-star reytinguser" id="star5"></i>
+
+                                                    
+                                                    <!-- Hidden field for reyting (rating) -->
+                                                    {{ form.reyting }}
                                                 </div>
-                                                <div class="col-sm-6">
-                                                    <input type="email" placeholder="Email">
+                                                <div class="row form">
+                                                    <div class="col-sm-12">
+                                                        {{ form.izoh }}
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <button type="submit">Jo'natish</button>
+                                                    </div>
                                                 </div>
-                                                <div class="col-sm-12">
-                                                    <textarea placeholder="Review"></textarea>
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    <button>Submit</button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                            </form>
+                                            
+                                            <!-- Script to handle star rating selection -->
+                                            <script>
+                                                // Function to handle star rating selection
+                                                document.addEventListener('DOMContentLoaded', function () {
+                                                    const stars = document.querySelectorAll('.reytinguser');
+                                                    const reytingField = document.querySelector('#id_reyting'); 
+                                                    
+                                                    reytingField.style.display = 'none';
+                                                    // Replace id_reyting with actual ID
+                                            
+                                                    stars.forEach((star, index) => {
+                                                        star.addEventListener('mouseover', function () {
+                                                            highlightStars(index);
+                                                        });
+                                            
+                                                        star.addEventListener('click', function () {
+                                                            const ratingValue = index + 1;
+                                                            reytingField.value = ratingValue;
+                                                            highlightStars(index);
+                                                        });
+                                            
+                                                        star.addEventListener('mouseout', function () {
+                                                            const currentRating = reytingField.value;
+                                                            if (currentRating === '') {
+                                                                highlightStars(-1); // Clear stars if no rating selected
+                                                            } else {
+                                                                highlightStars(currentRating + 1);
+                                                            }
+                                                        });
+                                                    });
+                                            
+                                                    function highlightStars(index) {
+                                                        stars.forEach((star, i) => {
+                                                            if (i <= index) {
+                                                                star.classList.remove('far');
+                                                                star.classList.add('fas');
+                                                            } else {
+                                                                star.classList.remove('fas');
+                                                                star.classList.add('far');
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            </script>
+                                            
+                                            
+                                        {% else %}
+                                            <p><a href="{% url 'login' %}">Log in</a> to leave a review.</p>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
+                        {% if mahsulotlar %}
                         <div class="product">
                             <div class="section-header">
-                                <h1>Related Products</h1>
+                                <h1>O'xshash mahsulotlar</h1>
                             </div>
 
                             <div class="row align-items-center product-slider product-slider-3">
@@ -165,7 +216,7 @@
                                 <div class="col-lg-3">
                                     <div class="product-item">
                                         <div class="product-title">
-                                            <a href="#">{{mahsulot.nomi}}</a>
+                                            <a href="#">{{ mahsulot.nomi }}</a>
                                             <div class="ratting">
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>
@@ -175,9 +226,9 @@
                                             </div>
                                         </div>
                                         <div class="product-image">
-                                            {% with first_product=mahsulot.Mahsulot.first %}                        <a href="product-detail.html">
-                                                <a href="{% url 'product_detail' product.id %}">
-                                                <img src="{{ first_product.rasmi.url }}" alt="{{ product.name }}">
+                                            {% with first_product=mahsulot.Mahsulot.first %}
+                                            <a href="{% url 'product_detail' product.id %}">
+                                                <img src="{{ first_product.rasmi.url }}" alt="{{ mahsulot.nomi }}">
                                             </a>
                                             {% endwith %}
                                             <div class="product-action">
@@ -187,13 +238,14 @@
                                             </div>
                                         </div>
                                         <div class="product-price">
-                                            <h3><span>Uzs</span>{{mahsulot.narxi}}</h3>
+                                            <h3><span>Uzs</span>{{ mahsulot.narxi }}</h3>
                                             <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
                                         </div>
                                     </div>
                                 </div>
                                 {% endfor %}
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                     
@@ -203,30 +255,21 @@
                             <h2 class="title">Category</h2>
                             <nav class="navbar bg-light">
                                 <ul class="navbar-nav">
+                                    {% for kategoriya in kategoriyas %}
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#"><i class="fa fa-female"></i>Fashion & Beauty</a>
+                                        <a class="nav-link" href="#"><i class="fa fa-home"></i>{{kategoriya.nomi}}</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#"><i class="fa fa-child"></i>Kids & Babies Clothes</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#"><i class="fa fa-tshirt"></i>Men & Women Clothes</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#"><i class="fa fa-mobile-alt"></i>Gadgets & Accessories</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#"><i class="fa fa-microchip"></i>Electronics & Accessories</a>
-                                    </li>
+                                    {% endfor %}
                                 </ul>
                             </nav>
                         </div>
                         
                         <div class="sidebar-widget widget-slider">
                             <div class="sidebar-slider normal-slider">
+                                {% for new_product in last_products %}
                                 <div class="product-item">
                                     <div class="product-title">
-                                        <a href="#">Product Name</a>
+                                        <a href="#">{{new_product.nomi}}</a>
                                         <div class="ratting">
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
@@ -236,8 +279,11 @@
                                         </div>
                                     </div>
                                     <div class="product-image">
-                                        <a href="product-detail.html">
-                                            <img src="img/product-7.jpg" alt="Product Image">
+                                        <a href="{% url 'product_detail' new_product.id %}">
+                                            {% with first_product=new_product.Mahsulot.first %}                        
+                                            <img src="{{ first_product.rasmi.url }}" alt="Product Image">
+                                            {% endwith %}   
+
                                         </a>
                                         <div class="product-action">
                                             <a href="#"><i class="fa fa-cart-plus"></i></a>
@@ -246,66 +292,16 @@
                                         </div>
                                     </div>
                                     <div class="product-price">
-                                        <h3><span>$</span>99</h3>
+                                        <h3><span>$</span>{{new_product.narxi}}</h3>
                                         <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
                                     </div>
                                 </div>
-                                <div class="product-item">
-                                    <div class="product-title">
-                                        <a href="#">Product Name</a>
-                                        <div class="ratting">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                    </div>
-                                    <div class="product-image">
-                                        <a href="product-detail.html">
-                                            <img src="img/product-8.jpg" alt="Product Image">
-                                        </a>
-                                        <div class="product-action">
-                                            <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                            <a href="#"><i class="fa fa-heart"></i></a>
-                                            <a href="#"><i class="fa fa-search"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="product-price">
-                                        <h3><span>$</span>99</h3>
-                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
-                                    </div>
-                                </div>
-                                <div class="product-item">
-                                    <div class="product-title">
-                                        <a href="#">Product Name</a>
-                                        <div class="ratting">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                    </div>
-                                    <div class="product-image">
-                                        <a href="product-detail.html">
-                                            <img src="img/product-9.jpg" alt="Product Image">
-                                        </a>
-                                        <div class="product-action">
-                                            <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                            <a href="#"><i class="fa fa-heart"></i></a>
-                                            <a href="#"><i class="fa fa-search"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="product-price">
-                                        <h3><span>$</span>99</h3>
-                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
-                                    </div>
-                                </div>
+                                {% endfor %}
+                                
                             </div>
                         </div>
                         
-                        <div class="sidebar-widget brands">
+                        <!-- <div class="sidebar-widget brands">
                             <h2 class="title">Our Brands</h2>
                             <ul>
                                 <li><a href="#">Nulla </a><span>(45)</span></li>
@@ -315,9 +311,9 @@
                                 <li><a href="#">Fusce </a><span>(89)</span></li>
                                 <li><a href="#">Sagittis</a><span>(28)</span></li>
                             </ul>
-                        </div>
+                        </div> -->
                         
-                        <div class="sidebar-widget tag">
+                        <!-- <div class="sidebar-widget tag">
                             <h2 class="title">Tags Cloud</h2>
                             <a href="#">Lorem ipsum</a>
                             <a href="#">Vivamus</a>
@@ -331,7 +327,7 @@
                             <a href="#">Vel posuere</a>
                             <a href="#">orci luctus</a>
                             <a href="#">Nam lorem</a>
-                        </div>
+                        </div> -->
                     </div>
                     <!-- Side Bar End -->
                 </div>

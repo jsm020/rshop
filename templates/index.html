@@ -269,11 +269,11 @@
                         </div>
                     </div>
                     <div class="product-image">
-                        {% for rasm in new_product.Mahsulot.all %}
+                        {% with first_product=new_product.Mahsulot.first %}                        
                         <a href="product-detail.html">
-                            <img src="{{ rasm.rasmi.url }}" alt="Product Image">
+                            <img src="{{ first_product.rasmi.url }}" alt="Product Image">
                         </a>
-                        {% endfor %}
+                        {% endwith %}   
                         <div class="product-action">
                             <a href="#"><i class="fa fa-cart-plus"></i></a>
                             <a href="#"><i class="fa fa-heart"></i></a>

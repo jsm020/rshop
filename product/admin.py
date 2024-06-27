@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Mahsulot, mahsulotRasmlari,Kategoriya,mahsulotReyting,ReviewProducts
+from .models import Mahsulot, mahsulotRasmlari,Kategoriya,ReviewProducts
 
 class mahsulotRasmlariInline(admin.TabularInline):
     model = mahsulotRasmlari
@@ -12,5 +12,5 @@ class MahsulotAdmin(admin.ModelAdmin):
 
 admin.site.register(Mahsulot, MahsulotAdmin)
 admin.site.register(Kategoriya)
-admin.site.register(mahsulotReyting)
+# admin.site.register(mahsulotReyting)
 admin.site.register(ReviewProducts)

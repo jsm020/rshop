@@ -13,13 +13,13 @@ def index(request):
     all_categories = CategoryRasm.objects.all()
     
     # Filtering categories
-    categoriyes = all_categories.filter(id__in=[6, 7])
-    last_categoriye1 = all_categories.filter(id=8)
-    last_categoriye2 = all_categories.filter(id=9)
-    last_categoriye3 = all_categories.filter(id=10)
-    last_categoriye4 = all_categories.filter(id=11)
-    last_categoriye5 = all_categories.filter(id=12)
-    last_categoriye6 = all_categories.filter(id=13)
+    categoriyes = all_categories.filter(id__in=[1, 2])
+    last_categoriye1 = all_categories.filter(id=3)
+    last_categoriye2 = all_categories.filter(id=4)
+    last_categoriye3 = all_categories.filter(id=5)
+    last_categoriye4 = all_categories.filter(id=6)
+    last_categoriye5 = all_categories.filter(id=7)
+    last_categoriye6 = all_categories.filter(id=8)
 
     now = timezone.now()
     # Bir kun oldingi vaqtni olish

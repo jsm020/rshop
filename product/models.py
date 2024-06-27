@@ -1,4 +1,5 @@
 from django.db import models
+from members.models import CustomUser
 
 class Kategoriya(models.Model):
     nomi = models.CharField(max_length=50)
@@ -31,21 +32,13 @@ class mahsulotRasmlari(models.Model):
         verbose_name_plural = "Mahsulot rasmlari"
 
 
-class mahsulotReyting(models.Model):
-    mahsulot = models.ForeignKey(Mahsulot, related_name="reytinglar", on_delete=models.CASCADE)
-    reytin = models.IntegerField()
 
-    class Meta:
-        verbose_name = "Mahsulot reytingi"
-        verbose_name_plural = "Mahsulot reytingi"
-    
-    def __str__(self):
-        return f"Reyting for {self.mahsulot.nomi}: {self.reytin}"
-    
 
 class ReviewProducts(models.Model):
+    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
     mahsulot_nomi = models.ForeignKey(Mahsulot,on_delete=models.CASCADE)
     izoh = models.CharField(max_length=250)
-
-    def __str__(self) -> str:
-        return self.izoh
+    time  = models.DateField(auto_now=True)
+    reyting = models.PositiveIntegerField(default=0)  # Rating out of 5
+    def __str__(self):
+        return f"{self.izoh} - {self.reyting} stars"
