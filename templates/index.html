@@ -215,7 +215,7 @@
                             <img src="{{ first_product.rasmi.url }}" alt="Product Image">
                         </a>
                         {% endwith %}                        <div class="product-action">
-                            <a href="#"><i class="fa fa-cart-plus"></i></a>
+                            <a href="{% url 'add_to_cart' new_product.id %}"><i class="fa fa-cart-plus"></i></a>
                             <a href="#"><i class="fa fa-heart"></i></a>
                             <a href="#"><i class="fa fa-search"></i></a>
                         </div>

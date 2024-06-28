@@ -75,7 +75,7 @@
                                             </div> 
                                         </div> -->
                                         <div class="action">
-                                            <a class="btn" href="#"><i class="fa fa-shopping-cart"></i>Add to Cart</a>
+                                            <a class="btn" href="{% url 'add_to_cart' product.id %}"><i class="fa fa-shopping-cart"></i>Add to Cart</a>
                                             <a class="btn" href="#"><i class="fa fa-shopping-bag"></i>Buy Now</a>
                                         </div>
                                     </div>
@@ -232,7 +232,7 @@
                                             </a>
                                             {% endwith %}
                                             <div class="product-action">
-                                                <a href="#"><i class="fa fa-cart-plus"></i></a>
+                                                <a href="{% url 'add_to_cart' mahsulot.id %}"><i class="fa fa-cart-plus"></i></a>
                                                 <a href="#"><i class="fa fa-heart"></i></a>
                                                 <a href="#"><i class="fa fa-search"></i></a>
                                             </div>
@@ -286,7 +286,7 @@
 
                                         </a>
                                         <div class="product-action">
-                                            <a href="#"><i class="fa fa-cart-plus"></i></a>
+                                            <a href="{% url 'add_to_cart' new_product.id %}"><i class="fa fa-cart-plus"></i></a>
                                             <a href="#"><i class="fa fa-heart"></i></a>
                                             <a href="#"><i class="fa fa-search"></i></a>
                                         </div>
