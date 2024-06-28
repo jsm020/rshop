@@ -1,5 +1,9 @@
+import os
 from django.db import models
 from members.models import CustomUser
+from PIL import Image
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 class Kategoriya(models.Model):
     nomi = models.CharField(max_length=50)
@@ -32,7 +36,21 @@ class mahsulotRasmlari(models.Model):
         verbose_name_plural = "Mahsulot rasmlari"
 
 
+    def save(self, *args, **kwargs):
+        super(mahsulotRasmlari, self).save(*args, **kwargs)
 
+        img = Image.open(self.rasmi.path)
+        
+        if img.height != 300 or img.width != 300:
+            output_size = (300, 300)
+            img = img.resize(output_size, Image.Resampling.LANCZOS)
+            img.save(self.rasmi.path)
+
+@receiver(post_delete, sender=mahsulotRasmlari)
+def delete_image_files(sender, instance, **kwargs):
+    if instance.rasmi:
+        if os.path.isfile(instance.rasmi.path):
+            os.remove(instance.rasmi.path)
 
 class ReviewProducts(models.Model):
     user = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
