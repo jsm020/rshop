@@ -10,3 +10,13 @@ class ReviewForm(forms.ModelForm):
             'izoh': forms.Textarea(attrs={'placeholder': 'Izoh qoldirish'}),
             'reyting': forms.NumberInput(attrs={'min': 1, 'max': 5}),
         }
+
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField(
+        max_length=100,
+        required=False,
+        label='Search',
+        widget=forms.TextInput(attrs={'placeholder': 'Izlash...'})
+    )

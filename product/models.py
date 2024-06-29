@@ -41,8 +41,8 @@ class mahsulotRasmlari(models.Model):
 
         img = Image.open(self.rasmi.path)
         
-        if img.height != 300 or img.width != 300:
-            output_size = (300, 300)
+        if img.height != 500 or img.width != 500:
+            output_size = (500, 500)
             img = img.resize(output_size, Image.Resampling.LANCZOS)
             img.save(self.rasmi.path)
 

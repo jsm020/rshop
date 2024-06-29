@@ -1,5 +1,40 @@
 {% extends './base.html' %}
 {% block content %}
+<div class="bottom-bar">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-3">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="" alt="Logo">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="search">
+                    <form method="GET" action="">
+                        {% csrf_token %}
+
+                        {{ form.query }}
+                        <button type="submit"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="user">
+                    <a href="wishlist.html" class="btn wishlist">
+                        <i class="fa fa-heart"></i>
+                        <span>(0)</span>
+                    </a>
+                    <a href="{% url 'cart_detail' %}" class="btn cart">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span>(0)</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
         
         <!-- Breadcrumb Start -->
         <div class="breadcrumb-wrap">
@@ -20,14 +55,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="product-view-top">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="product-search">
-                                                <input type="email" value="Search">
-                                                <button><i class="fa fa-search"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
+                                    <!-- <div class="row">
+                                        <div class="col-md-3">
                                             <div class="product-short">
                                                 <div class="dropdown">
                                                     <div class="dropdown-toggle" data-toggle="dropdown">Product short by</div>
@@ -58,9 +87,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
+                            {% if page_obj %}
                             {% for mahsulot in page_obj %}
                             <div class="col-md-4">
                                 <div class="product-item">
@@ -80,6 +110,12 @@
                                 </div>
                             </div>
                             {% endfor %}
+                            {% else %}
+                            
+                                <h5>Mahsulot topilmadi</h5>
+
+                            {% endif %}
+
 
                         </div>
                         
@@ -126,21 +162,11 @@
                             <h2 class="title">Category</h2>
                             <nav class="navbar bg-light">
                                 <ul class="navbar-nav">
+                                    {% for kategoriya in kategoriyas %}
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#"><i class="fa fa-female"></i>Fashion & Beauty</a>
+                                        <a class="nav-link" href="#"><i class="fa fa-home"></i>{{kategoriya.nomi}}</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#"><i class="fa fa-child"></i>Kids & Babies Clothes</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#"><i class="fa fa-tshirt"></i>Men & Women Clothes</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#"><i class="fa fa-mobile-alt"></i>Gadgets & Accessories</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#"><i class="fa fa-microchip"></i>Electronics & Accessories</a>
-                                    </li>
+                                    {% endfor %}
                                 </ul>
                             </nav>
                         </div>

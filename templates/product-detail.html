@@ -1,7 +1,37 @@
 {% extends './base.html' %}
 {% block content %}
 {% load custom_filters %}
-
+<div class="bottom-bar">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-3">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="" alt="Logo">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="search">
+                    <input type="text" placeholder="Search">
+                    <button><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="user">
+                    <a href="wishlist.html" class="btn wishlist">
+                        <i class="fa fa-heart"></i>
+                        <span>(0)</span>
+                    </a>
+                    <a href="cart.html" class="btn cart">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span>(0)</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
         <!-- Breadcrumb Start -->
         <div class="breadcrumb-wrap">
             <div class="container-fluid">
@@ -216,7 +246,7 @@
                                 <div class="col-lg-3">
                                     <div class="product-item">
                                         <div class="product-title">
-                                            <a href="#">{{ mahsulot.nomi }}</a>
+                                            <a href="{% url 'product_detail' mahsulot.id %}">{{ mahsulot.nomi }}</a>
                                             <div class="ratting">
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>
@@ -227,7 +257,7 @@
                                         </div>
                                         <div class="product-image">
                                             {% with first_product=mahsulot.Mahsulot.first %}
-                                            <a href="{% url 'product_detail' product.id %}">
+                                            <a href="{% url 'product_detail' mahsulot.id %}">
                                                 <img src="{{ first_product.rasmi.url }}" alt="{{ mahsulot.nomi }}">
                                             </a>
                                             {% endwith %}
@@ -239,7 +269,7 @@
                                         </div>
                                         <div class="product-price">
                                             <h3><span>Uzs</span>{{ mahsulot.narxi }}</h3>
-                                            <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                            <a class="btn" href="{% url 'add_to_cart' mahsulot.id %}"><i class="fa fa-shopping-cart"></i>Buy Now</a>
                                         </div>
                                     </div>
                                 </div>

@@ -2,20 +2,33 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from .models import Mahsulot, ReviewProducts,Kategoriya,Cart, CartItem
-from .forms import ReviewForm
+from .forms import ReviewForm, SearchForm
 from banner.models import LogoRasmlar
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_protect
+from django.db.models import Q
 
-# Create your views here.
 def MahsulotList(request):
-    products = Mahsulot.objects.all()
+    form = SearchForm(request.GET or None)
+    query = ''
+    products = Mahsulot.objects.all().order_by('-id')  # Mahsulotlarni teskari tartibda
+    
+    if form.is_valid():
+        query = form.cleaned_data.get('query', '')
+        if query:
+            products = products.filter(
+                Q(nomi__icontains=query) | 
+                Q(kategoriya__nomi__icontains=query)
+            )
+    
     logos = LogoRasmlar.objects.all()
-    paginator = Paginator(products, 10)  # Har bir sahifada 10 ta mahsulot
+    paginator = Paginator(products, 12)  # 12 products per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    kategoriyas = Kategoriya.objects.all()
 
-    return render(request, 'product-list.html', {"logos":logos,"page_obj":page_obj})
+
+    return render(request, 'product-list.html', {"logos": logos, "page_obj": page_obj, "form": form, "query": query,"kategoriyas":kategoriyas})
 
 
 @login_required
