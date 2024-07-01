@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Mahsulot, mahsulotRasmlari,Kategoriya,ReviewProducts,Cart, CartItem
+from .models import Mahsulot, mahsulotRasmlari,Kategoriya,ReviewProducts,Cart, CartItem,Wishlist
 
 class mahsulotRasmlariInline(admin.TabularInline):
     model = mahsulotRasmlari
@@ -23,7 +23,17 @@ class CartAdmin(admin.ModelAdmin):
     inlines = [CartItemInline]
 
 class CartItemAdmin(admin.ModelAdmin):
-    list_display = ('cart', 'product', 'quantity')
+    list_display = ('cart', 'product', 'quantity','total_price')
 
 admin.site.register(Cart, CartAdmin)
 admin.site.register(CartItem, CartItemAdmin)
+
+
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('nomi', 'narxi')
+
+class WishlistAdmin(admin.ModelAdmin):
+    list_display = ('user', 'created_at')
+    filter_horizontal = ('products',)
+
+admin.site.register(Wishlist, WishlistAdmin)

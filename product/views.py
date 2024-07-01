@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from .models import Mahsulot, ReviewProducts,Kategoriya,Cart, CartItem
+from .models import Mahsulot, ReviewProducts,Kategoriya,Cart, CartItem,Wishlist
 from .forms import ReviewForm, SearchForm
 from banner.models import LogoRasmlar
 from django.utils import timezone
@@ -26,9 +26,14 @@ def MahsulotList(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     kategoriyas = Kategoriya.objects.all()
+    now = timezone.now()
+    one_day_ago = now - timezone.timedelta(days=1)
+    last_products = Mahsulot.objects.filter(time__lt=one_day_ago)
 
 
-    return render(request, 'product-list.html', {"logos": logos, "page_obj": page_obj, "form": form, "query": query,"kategoriyas":kategoriyas})
+
+    return render(request, 'product-list.html', {"logos": logos, "page_obj": page_obj, "form": form, "query": query,"kategoriyas":kategoriyas,        'last_products':last_products,
+})
 
 
 @login_required
@@ -73,6 +78,7 @@ def add_to_cart(request, product_id):
     if not created:
         cart_item.quantity += 1
         cart_item.save()
+
     
     return redirect('cart_detail')
 
@@ -87,3 +93,34 @@ def remove_from_cart(request, item_id):
     cart_item.delete()
     return redirect('cart_detail')
 
+
+
+
+@login_required
+def wishlist(request):
+    wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+
+    context = {
+        'wishlist': wishlist,
+    }
+    return render(request, 'wishlist.html', context)
+
+
+@login_required
+def add_to_wishlist(request, product_id):
+    product = get_object_or_404(Mahsulot, id=product_id)
+    wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+
+    wishlist.products.add(product)
+    return redirect('wishlist')
+
+
+@login_required
+def remove_from_wishlist(request, product_id):
+    product = get_object_or_404(Mahsulot, id=product_id)
+    wishlist = get_object_or_404(Wishlist, user=request.user)
+    
+    if product in wishlist.products.all():
+        wishlist.products.remove(product)
+    
+    return redirect('wishlist')

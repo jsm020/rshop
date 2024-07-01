@@ -79,3 +79,17 @@ class CartItem(models.Model):
 
     def total_price(self):
         return self.quantity * self.product.narxi
+    def summ(cart_items):
+        return sum(item.total_price for item in cart_items)
+    
+    
+
+
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    products = models.ManyToManyField(Mahsulot, related_name='wishlist_products')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Wishlist of {self.user.username}"
