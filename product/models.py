@@ -4,6 +4,7 @@ from members.models import CustomUser
 from PIL import Image
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.core.validators import RegexValidator
 
 class Kategoriya(models.Model):
     nomi = models.CharField(max_length=50)
@@ -67,7 +68,10 @@ class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Cart {self.id} for {self.user}"
+        return f"{self.user}ning zakazi"
+    
+    def total_price(self):
+        return sum(item.total_price() for item in self.items.all())
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
@@ -79,8 +83,7 @@ class CartItem(models.Model):
 
     def total_price(self):
         return self.quantity * self.product.narxi
-    def summ(cart_items):
-        return sum(item.total_price for item in cart_items)
+
     
     
 
@@ -93,3 +96,20 @@ class Wishlist(models.Model):
 
     def __str__(self):
         return f"Wishlist of {self.user.username}"
+    
+
+
+
+class Checkout(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    narxi = models.CharField(max_length=50)
+    manzil = models.CharField(max_length=255)
+    viloyat = models.CharField(max_length=100)
+    shahar = models.CharField(max_length=100)
+    pochta_kodi = models.CharField(max_length=20, validators=[RegexValidator(r'^\d{1,20}$', 'pochta manzil kiriting')])
+    telefon_raqam = models.CharField(max_length=20, validators=[RegexValidator(r'^\+998\d{9}$', '+998 bilan boshlangan raqam kiriting')])
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Checkout {self.id} for {self.user}"

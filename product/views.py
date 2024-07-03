@@ -2,11 +2,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from .models import Mahsulot, ReviewProducts,Kategoriya,Cart, CartItem,Wishlist
-from .forms import ReviewForm, SearchForm
+from .forms import ReviewForm, SearchForm,CheckoutForm
 from banner.models import LogoRasmlar
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_protect
 from django.db.models import Q
+import requests
 
 def MahsulotList(request):
     form = SearchForm(request.GET or None)
@@ -124,3 +125,48 @@ def remove_from_wishlist(request, product_id):
         wishlist.products.remove(product)
     
     return redirect('wishlist')
+
+
+
+
+@login_required
+def checkout(request):
+    cart = get_object_or_404(Cart, user=request.user)
+
+    if request.method == 'POST':
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            checkout = form.save(commit=False)
+            checkout.user = request.user
+            checkout.cart = cart  # Userning karzinasiga bog'lang
+            checkout.narxi = cart.total_price()
+            print(checkout.narxi)
+            checkout.save()
+            
+            # Telegram orqali xabar yuborish
+            telegram_token = '7343961206:AAFXbMGTRNb_KJNbo3iQt-k-K9S1l7F0VIE'  # O'z tokeningizni qo'ying
+            chat_id = '5990121283'  # O'z chat ID ni qo'ying
+            message = f"Yangi buyurtma! Foydalanuvchi: {request.user.username}, Buyurtma ID: {checkout.id}"
+            
+            telegram_url = f"https://api.telegram.org/bot{telegram_token}/sendMessage"
+            payload = {
+                'chat_id': chat_id,
+                'text': message
+            }
+            response = requests.post(telegram_url, data=payload)
+            
+            if response.status_code == 200:
+                print("Xabar yuborildi")
+            else:
+                print("Xabar yuborishda xatolik")
+
+            # Muvaffaqiyat sahifasiga yo'nalish
+            return redirect('https://t.me/reyxan5')
+    else:
+        form = CheckoutForm()
+
+    context = {
+        'form': form,
+        'cart': cart,
+    }
+    return render(request, 'checkout.html', context)
